@@ -29,7 +29,7 @@ class PageViewController: UIPageViewController {
             as? Data else{
                 print("ERROR")
                 //TODO: Get user location for the first element in weatherLocation
-                weatherLocations.append(WeatherLocation(name: "CURRENT LOCATION", latitude: 20.20, longitude: 20.20))
+                weatherLocations.append(WeatherLocation(name: "", latitude: 20.20, longitude: 20.20))
             return
         }
         if weatherLocations.isEmpty {
@@ -56,12 +56,13 @@ class PageViewController: UIPageViewController {
     func createLocationDetailViewController(forPage page: Int) -> LocationDetailViewController {
         let detailViewController = storyboard!.instantiateViewController(identifier: "LocationDetailViewController") as! LocationDetailViewController
         detailViewController.locationIndex = page
+        return detailViewController
     }
 
 }
 extension PageViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource{
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        if let currentViewController = viewController as! LocationDetailViewController {
+        if let currentViewController = viewController as? LocationDetailViewController {
             if currentViewController.locationIndex > 0{
                 return createLocationDetailViewController(forPage: currentViewController.locationIndex - 1)
             }
@@ -70,11 +71,12 @@ extension PageViewController: UIPageViewControllerDelegate, UIPageViewController
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let currentViewController = viewController as! LocationDetailViewController{
+        if let currentViewController = viewController as? LocationDetailViewController {
             if currentViewController.locationIndex < weatherLocations.count - 1 {
-                return currentViewController(forPage: currentViewController.locationIndex + 1)
+                return createLocationDetailViewController(forPage: currentViewController.locationIndex + 1)
             }
         }
+        return nil
     }
     
 }

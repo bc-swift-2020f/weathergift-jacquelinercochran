@@ -28,8 +28,8 @@ class LocationListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        loadLocations()
-        updateInterface()
+      //  loadLocations()
+       // updateUserInterface()
         // Do any additional setup after loading the view.
     }
 
@@ -37,7 +37,7 @@ class LocationListViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         selectedLocationIndex = tableView.indexPathForSelectedRow!.row
-        saveLocations()
+       // saveLocations()
     }
     
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
@@ -92,6 +92,16 @@ extension LocationListViewController: UITableViewDataSource, UITableViewDelegate
         
     }
     
+    //MARK: - tableView methods to freeze the first cell
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.row != 0 ? true : false
+    }
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.row != 0 ? true : false
+    }
+    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        return (proposedDestinationIndexPath.row == 0 ? sourceIndexPath : proposedDestinationIndexPath)
+    }
     
 }
 
